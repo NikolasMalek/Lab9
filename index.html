@@ -88,6 +88,14 @@
   </main>
 
   <script>
+    // Custom Error Class
+    class CalculatorError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CalculatorError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,7 +103,32 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        // 1. Throw a Custom Error if fields are empty
+        if (firstNum === '' || secondNum === '') {
+          throw new CalculatorError("Both input fields must be filled out!");
+        }
+
+        // 2. The eval() function can naturally throw a SyntaxError if inputs are invalid (like letters)
+        let result = eval(`${firstNum} ${operator} ${secondNum}`);
+
+        // 3. Throw a standard Error for dividing by zero
+        if (operator === '/' && secondNum === '0') {
+          throw new Error("Cannot divide by zero!");
+        }
+
+        output.innerHTML = result;
+
+      } catch (err) {
+        // Catch the error and log it to the console, and show it on the UI
+        console.error(`${err.name} caught:`, err.message);
+        output.innerHTML = err.message;
+        
+      } finally {
+        // Finally blocks run regardless of success or failure
+        console.log("Calculation attempt finished.");
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
@@ -106,81 +139,81 @@
       { course: "Data Structures", number: 100 }
     ];
 
-    // 0. Console Log
+    // Console Log
     errorBtns[0].addEventListener('click', () => {
       console.log("Console Log Demo button clicked!");
     });
 
-    // 1. Console Error
+    // Console Error
     errorBtns[1].addEventListener('click', () => {
       console.error("This is a simulated error message!");
     });
 
-    // 2. Console Count
+    //Console Count
     errorBtns[2].addEventListener('click', () => {
       console.count("Count Button clicked");
     });
 
-    // 3. Console Warn
+    //  Console Warn
     errorBtns[3].addEventListener('click', () => {
       console.warn("This is a warning!");
     });
 
-    // 4. Console Assert
+    //  Console Assert
     errorBtns[4].addEventListener('click', () => {
       const number = 2;
       console.assert(number === 3, "Assertion failed: number is not equal to 3");
     });
 
-    // 5. Console Clear
+    //Console Clear
     errorBtns[5].addEventListener('click', () => {
       console.clear();
     });
 
-    // 6. Console Dir
+    // Console Dir
     errorBtns[6].addEventListener('click', () => {
       console.dir(document.body);
     });
 
-    // 7. Console dirxml
+    // Console dirxml
     errorBtns[7].addEventListener('click', () => {
       console.dirxml(document);
     });
 
-    // 8. Console Group Start
+    //  Console Group Start
     errorBtns[8].addEventListener('click', () => {
       console.group("My Console Group");
       console.log("We are inside the group now!");
     });
 
-    // 9. Console Group End
+    //  Console Group End
     errorBtns[9].addEventListener('click', () => {
       console.groupEnd();
     });
 
-    // 10. Console Table
+    // Console Table
     errorBtns[10].addEventListener('click', () => {
       console.table(demoData);
     });
 
-    // 11. Start Timer
+    // Start Timer
     errorBtns[11].addEventListener('click', () => {
       console.time("DemoTimer");
       console.log("Timer started...");
     });
 
-    // 12. End Timer
+    // End Timer
     errorBtns[12].addEventListener('click', () => {
       console.timeEnd("DemoTimer");
     });
 
-    // 13. Console Trace
+    // Console Trace
     errorBtns[13].addEventListener('click', () => {
       const deepFunction = () => { console.trace("Trace demo!"); };
       deepFunction();
     });
 
-    // 14. Trigger a Global Error (Skipped for now per Step 2 instructions)
+    // Trigger a Global Error (Skipped for now per Step 2 instructions)
     
   </script>
 </body>
