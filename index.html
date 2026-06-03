@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab 9</title>
 
+  <script type="text/javascript">window._trackJs = { token: '6f4fa9309f2a431f95be282a03db8f81' };</script>
+  <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
+
   <style>
     button {
       margin: 3px;
@@ -213,7 +216,17 @@
       deepFunction();
     });
 
-    // Trigger a Global Error (Skipped for now per Step 2 instructions)
+    // Catch unhandled errors globally
+    window.addEventListener('error', (event) => {
+      console.log('Global error caught: ', event.message);
+    });
+
+    // Trigger a Global Error
+    errorBtns[14].addEventListener('click', () => {
+      console.log("Attempting to trigger a global error...");
+      // This function doesn't exist, so it will throw an uncaught ReferenceError
+      sadlyThisFunctionDoesNotExist(); 
+    });
     
   </script>
 </body>
